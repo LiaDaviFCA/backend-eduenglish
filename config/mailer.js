@@ -112,7 +112,7 @@ async function notificarVentas(leadId, lead) {
   </html>`;
 
   const { error } = await resend.emails.send({
-    from:    'EduEnglishMx Leads <onboarding@resend.dev>',
+    from:    'EduEnglishMx Leads <hola@eduenglishmx.com>',
     to:      destino,
     subject: `Nuevo lead registrado — ${lead.nombre_completo} [LEAD-${leadId}]`,
     html
@@ -219,7 +219,7 @@ async function confirmarProspecto(leadId, lead) {
   </html>`;
 
   const { error } = await resend.emails.send({
-    from:    'EduEnglishMx <onboarding@resend.dev>',
+    from:    'EduEnglishMx <hola@eduenglishmx.com>',
     to:      lead.correo_electronico,
     subject: `¡Gracias por tu interés en EduEnglishMx, ${lead.nombre_completo.split(' ')[0]}!`,
     html
