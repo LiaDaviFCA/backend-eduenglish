@@ -1,4 +1,4 @@
-# 🚀 Backend EduEnglish – Sistema de Captación de Leads
+# Backend EduEnglish – Sistema de Captación de Leads
 
 **Modelos de Evaluación de Software – 2026A**
 
@@ -6,7 +6,7 @@ Backend RESTful en Node.js + Express para capturar leads de la Landing Page de E
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 backend-eduenglish/
@@ -26,7 +26,7 @@ backend-eduenglish/
 
 ---
 
-## ⚡ Instalación Local (desarrollo)
+## Instalación Local (desarrollo)
 
 ### Requisitos previos
 - Node.js 18+
@@ -56,7 +56,7 @@ El servidor estará en `http://localhost:3000`
 
 ---
 
-## 🔌 Conectar la Landing Page al Backend
+## Conectar la Landing Page al Backend
 
 En `landing_escuela_ingles.html`, busca la línea:
 ```js
@@ -90,7 +90,7 @@ lead.id = data.lead_id;   // Usa el ID real de BD
 
 ---
 
-## 📡 Endpoints disponibles
+## Endpoints disponibles
 
 | Método | Ruta             | Descripción                              |
 |--------|-----------------|------------------------------------------|
@@ -130,7 +130,7 @@ lead.id = data.lead_id;   // Usa el ID real de BD
 
 ---
 
-## ☁️ Despliegue en Railway (gratis)
+## Despliegue en Railway (gratis)
 
 1. Crea una cuenta en [railway.app](https://railway.app)
 2. Nuevo proyecto → **Deploy from GitHub** (sube el código a un repo)
@@ -142,7 +142,7 @@ lead.id = data.lead_id;   // Usa el ID real de BD
 
 ---
 
-## 🛡️ Seguridad implementada
+## Seguridad implementada
 
 - **Helmet** – Cabeceras HTTP de seguridad
 - **CORS** – Solo tu dominio puede llamar a la API
@@ -154,7 +154,7 @@ lead.id = data.lead_id;   // Usa el ID real de BD
 
 ---
 
-## 🔑 Integración con HubSpot CRM
+## Integración con HubSpot CRM
 
 1. Crea cuenta gratis en [hubspot.com](https://hubspot.com)
 2. Ve a **Settings → Integrations → API Key**
@@ -164,7 +164,7 @@ lead.id = data.lead_id;   // Usa el ID real de BD
 
 ---
 
-## 📊 Credenciales de acceso (para entrega)
+## Credenciales de acceso (para entrega)
 
 | Recurso | Dato |
 |---------|------|
