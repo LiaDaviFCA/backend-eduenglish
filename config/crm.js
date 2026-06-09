@@ -1,42 +1,44 @@
 // config/crm.js
 // Integración con HubSpot CRM vía API v3
-// Documentación: https://developers.hubspot.com/docs/api/crm/contacts
+// Usa Service Key (pat-na1-xxx) con campos estándar
 
 const fetch = require('node-fetch');
 const { pool } = require('../db/connection');
 
 const HUBSPOT_API = 'https://api.hubapi.com/crm/v3/objects/contacts';
 
-/**
- * Envía un lead al CRM (HubSpot) y actualiza el registro en BD.
- * Se llama de forma asíncrona después de guardar en BD,
- * para que un fallo del CRM no bloquee la respuesta al usuario.
- */
 async function enviarAlCRM(leadId, leadData) {
   const token = process.env.HUBSPOT_ACCESS_TOKEN;
 
-  // Si no hay token configurado, solo loguea y sale
-  if (!token || token.startsWith('pat-na1-xxxxx')) {
-    console.log(`[CRM] ⚠️  Token no configurado. Lead ${leadId} no enviado al CRM (modo desarrollo).`);
+  if (!token || token.includes('xxxxx')) {
+    console.log(`[CRM] ⚠️  Token no configurado. Lead ${leadId} no enviado al CRM.`);
     return;
   }
 
   try {
-    // Mapear campos al esquema de HubSpot
+    const nombreParts = leadData.nombre_completo.split(' ');
+    const firstname = nombreParts[0];
+    const lastname  = nombreParts.slice(1).join(' ') || '';
+
+    // Solo campos estándar de HubSpot — no requieren propiedades personalizadas
     const hubspotPayload = {
       properties: {
-        firstname:   leadData.nombre_completo.split(' ')[0],
-        lastname:    leadData.nombre_completo.split(' ').slice(1).join(' '),
-        phone:       leadData.telefono,
-        email:       leadData.correo_electronico,
-        // Propiedades personalizadas (créalas en HubSpot Settings > Properties)
-        nivel_ingles:         leadData.nivel_ingles,
-        modalidad_preferida:  leadData.modalidad_preferida,
-        horario_preferido:    leadData.horario_preferido,
-        motivo_estudio:       leadData.motivo_estudio || '',
-        desea_prueba_nivel:   leadData.desea_prueba_nivel ? 'Sí' : 'No',
-        origen_lead:          leadData.origen,
-        hs_lead_status:       'NEW'
+        firstname,
+        lastname,
+        phone:  leadData.telefono,
+        email:  leadData.correo_electronico,
+        // Campos estándar disponibles en todos los portales
+        hs_lead_status: 'NEW',
+        // Información académica en el campo "notes" estándar
+        hs_content_membership_notes: [
+          `Nivel: ${leadData.nivel_ingles}`,
+          `Modalidad: ${leadData.modalidad_preferida}`,
+          `Horario: ${leadData.horario_preferido}`,
+          `Motivo: ${leadData.motivo_estudio || 'No especificado'}`,
+          `Prueba de nivel: ${leadData.desea_prueba_nivel ? 'Sí' : 'No'}`,
+          `Origen: ${leadData.origen}`,
+          `Lead ID: LEAD-${leadId}`
+        ].join(' | ')
       }
     };
 
@@ -57,7 +59,6 @@ async function enviarAlCRM(leadId, leadData) {
     const result = await response.json();
     const crmContactId = result.id;
 
-    // Actualizar BD: marcar como enviado al CRM
     await pool.execute(
       `UPDATE leads_escuela_ingles
        SET crm_enviado = 1, crm_fecha_envio = NOW(), crm_contact_id = ?
@@ -68,9 +69,7 @@ async function enviarAlCRM(leadId, leadData) {
     console.log(`[CRM] ✅ Lead ${leadId} → HubSpot contacto ID ${crmContactId}`);
 
   } catch (err) {
-    // El fallo del CRM NO detiene el flujo; el lead ya está en BD
     console.error(`[CRM] ❌ Error al enviar lead ${leadId}:`, err.message);
-    // En producción aquí podrías encolar el reintento (Redis, Bull, etc.)
   }
 }
 
