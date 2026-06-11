@@ -36,7 +36,7 @@ async function enviarAlCRM(leadId, leadData) {
         horario_preferido:   leadData.horario_preferido   || '',
         motivo_estudio:      leadData.motivo_estudio      || '',
         desea_prueba_nivel:  leadData.desea_prueba_nivel ? 'true' : 'false',
-        comentarios:         leadData.comentarios         || ''
+        comentarios_adicionales: leadData.comentarios || ''
       }
     };
 
