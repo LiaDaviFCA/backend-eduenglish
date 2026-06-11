@@ -20,25 +20,23 @@ async function enviarAlCRM(leadId, leadData) {
     const firstname = nombreParts[0];
     const lastname  = nombreParts.slice(1).join(' ') || '';
 
-    // Solo campos estándar de HubSpot — no requieren propiedades personalizadas
     const hubspotPayload = {
       properties: {
+        // Campos estándar
         firstname,
         lastname,
-        phone:  leadData.telefono,
-        email:  leadData.correo_electronico,
-        // Campos estándar disponibles en todos los portales
+        phone:          leadData.telefono,
+        email:          leadData.correo_electronico,
         hs_lead_status: 'NEW',
-        // Información académica en el campo "notes" estándar
-        hs_content_membership_notes: [
-          `Nivel: ${leadData.nivel_ingles}`,
-          `Modalidad: ${leadData.modalidad_preferida}`,
-          `Horario: ${leadData.horario_preferido}`,
-          `Motivo: ${leadData.motivo_estudio || 'No especificado'}`,
-          `Prueba de nivel: ${leadData.desea_prueba_nivel ? 'Sí' : 'No'}`,
-          `Origen: ${leadData.origen}`,
-          `Lead ID: LEAD-${leadId}`
-        ].join(' | ')
+
+        // Campos personalizados
+        edad:                String(leadData.edad),
+        nivel_ingles:        leadData.nivel_ingles        || '',
+        modalidad_preferida: leadData.modalidad_preferida || '',
+        horario_preferido:   leadData.horario_preferido   || '',
+        motivo_estudio:      leadData.motivo_estudio      || '',
+        desea_prueba_nivel:  leadData.desea_prueba_nivel ? 'true' : 'false',
+        comentarios:         leadData.comentarios         || ''
       }
     };
 
